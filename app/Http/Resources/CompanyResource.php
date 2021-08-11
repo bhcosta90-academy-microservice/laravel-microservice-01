@@ -16,6 +16,7 @@ class CompanyResource extends JsonResource
     {
         return [
             'name' => $this->name,
+            'slug' => $this->url,
             'category' => new CategoryResource($this->category),
             'whatsapp' => $this->whatsapp,
             'email' => $this->email,
