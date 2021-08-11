@@ -73,8 +73,9 @@ class CategoryController extends Controller
      * @param  string $url
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($url)
     {
-        //
+        $this->repository->where('url', $url)->firstOrFail()->delete();
+        return response()->noContent();
     }
 }
