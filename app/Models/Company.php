@@ -11,7 +11,7 @@ class Company extends Model
 
     protected $fillable = [
         'name',
-        'url',
+        'category_id',
         'whatsapp',
         'email',
         'phone',
@@ -20,4 +20,9 @@ class Company extends Model
         'youtube',
         'image',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }

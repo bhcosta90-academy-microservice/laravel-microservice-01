@@ -14,7 +14,7 @@ class SlugObserver
      */
     public function creating(\Illuminate\Database\Eloquent\Model $obj)
     {
-        $obj->url = Str::slug($obj->title);
+        $obj->url = Str::slug($obj->title ?? $obj->name);
     }
 
     /**
@@ -25,7 +25,7 @@ class SlugObserver
      */
     public function updating(\Illuminate\Database\Eloquent\Model $obj)
     {
-        $obj->url = Str::slug($obj->title);
+        $obj->url = Str::slug($obj->title ?? $obj->name);
     }
 
     /**
