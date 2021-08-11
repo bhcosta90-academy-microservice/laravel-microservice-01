@@ -23,8 +23,10 @@ class CategoryStoreUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        $url = $this->route('category');
+
         return [
-            'title' => 'required|min:3|max:150',
+            'title' => "required|min:3|max:150|unique:categories,title,{$url},url",
             'description' => 'required|max:255'
         ];
     }

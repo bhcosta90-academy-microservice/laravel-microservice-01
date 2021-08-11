@@ -43,30 +43,34 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string $url
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($url)
     {
-        //
+        $obj = $this->repository->where('url', $url)->firstOrFail();
+        return new CategoryResource($obj);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string $url
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryStoreUpdateRequest $request, $url)
     {
-        //
+        $obj = $this->repository->where('url', $url)->firstOrFail();
+        $obj->fill($request->validated());
+        $obj->save();
+        return new CategoryResource($obj);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string $url
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
