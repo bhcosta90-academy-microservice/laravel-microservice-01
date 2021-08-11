@@ -60,8 +60,7 @@ class CategoryController extends Controller
     public function update(StoreUpdateRequest $request, $url)
     {
         $obj = $this->repository->where('url', $url)->firstOrFail();
-        $obj->fill($request->validated());
-        $obj->save();
+        $obj->update($request->validated());
         return new Resource($obj);
     }
 
