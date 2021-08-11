@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryStoreUpdateRequest;
-use App\Http\Resources\CategoryResource;
-use App\Models\Category;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\CategoryStoreUpdateRequest as StoreUpdateRequest;
+use App\Http\Resources\CategoryResource as Resource;
+use App\Models\Category as Repository;
 
 class CategoryController extends Controller
 {
     protected $repository;
 
-    public function __construct(Category $repository)
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
@@ -25,7 +23,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection($this->repository->paginate());
+        return Resource::collection($this->repository->paginate());
     }
 
     /**
@@ -34,10 +32,10 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryStoreUpdateRequest $request)
+    public function store(StoreUpdateRequest $request)
     {
         $obj = $this->repository->create($request->validated());
-        return new CategoryResource($obj);
+        return new Resource($obj);
     }
 
     /**
@@ -49,7 +47,7 @@ class CategoryController extends Controller
     public function show($url)
     {
         $obj = $this->repository->where('url', $url)->firstOrFail();
-        return new CategoryResource($obj);
+        return new Resource($obj);
     }
 
     /**
@@ -59,12 +57,12 @@ class CategoryController extends Controller
      * @param  string $url
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryStoreUpdateRequest $request, $url)
+    public function update(StoreUpdateRequest $request, $url)
     {
         $obj = $this->repository->where('url', $url)->firstOrFail();
         $obj->fill($request->validated());
         $obj->save();
-        return new CategoryResource($obj);
+        return new Resource($obj);
     }
 
     /**
