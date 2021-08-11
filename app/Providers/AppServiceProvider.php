@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\JsonResponseMiddleware;
+use App\Models\Category;
+use App\Observers\SlugObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $router = $this->app['router'];
+        $router->pushMiddlewareToGroup('api', JsonResponseMiddleware::class);
+        app('router')->aliasMiddleware('json', JsonResponseMiddleware::class);
     }
 
     /**
@@ -23,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Category::observe(SlugObserver::class);
     }
 }
