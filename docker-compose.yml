@@ -26,7 +26,7 @@ services:
             - redis
         entrypoint: bash -c "while [ true ]; do (php /var/www/html/artisan queue:work --stop-when-empty &); sleep 1; done"
     cron:
-        image: bhcosta90/php:8.0-dev
+        image: bhcosta90/php:8.0
         extra_hosts: [ "host.docker.internal:172.17.0.1" ]
         volumes:
             - '.:/var/www/html'
