@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyStoreUpdateRequest as StoreUpdateRequest;
 use App\Http\Resources\CompanyResource as Resource;
+use App\Jobs\TesteJob;
 use App\Models\Company as Repository;
 use App\Services\EvaluationService;
 
@@ -39,6 +40,9 @@ class CompanyController extends Controller
     public function store(StoreUpdateRequest $request)
     {
         $obj = $this->repository->create($request->validated());
+
+        TesteJob::dispatch();
+        
         return new Resource($obj);
     }
 

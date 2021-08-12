@@ -2,20 +2,10 @@
 version: "3.7"
 services:
     app:
-        build:
-            context: ./vendor/laravel/sail/runtimes/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: bhcosta90/laravel-microservice-01
+        image: bhcosta90/php:8.0-dev
         extra_hosts: [ "host.docker.internal:172.17.0.1" ]
         ports:
             - '${APP_PORT:-80}:80'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
             - '.:/var/www/html'
         networks:
@@ -25,17 +15,8 @@ services:
             - redis
         restart: unless-stopped
     worker:
-        build:
-            context: ./vendor/laravel/sail/runtimes/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: bhcosta90/laravel-microservice-01
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+        image: bhcosta90/php:8.0
+        extra_hosts: [ "host.docker.internal:172.17.0.1" ]
         volumes:
             - '.:/var/www/html'
         networks:
@@ -43,20 +24,10 @@ services:
         depends_on:
             - mysql
             - redis
-        command: /bin/sh -c "while [ true ]; do (php /var/www/html/artisan queue:work --stop-when-empty &); sleep 1; done"
-        restart: unless-stopped
+        entrypoint: bash -c "while [ true ]; do (php /var/www/html/artisan queue:work --stop-when-empty &); sleep 1; done"
     cron:
-        build:
-            context: ./vendor/laravel/sail/runtimes/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: bhcosta90/laravel-microservice-01
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+        image: bhcosta90/php:8.0-dev
+        extra_hosts: [ "host.docker.internal:172.17.0.1" ]
         volumes:
             - '.:/var/www/html'
         networks:
@@ -64,8 +35,7 @@ services:
         depends_on:
             - mysql
             - redis
-        command: /bin/sh -c "while [ true ]; do (php /var/www/html/artisan schedule:run --verbose --no-interaction &); sleep 60; done"
-        restart: unless-stopped
+        entrypoint: bash -c "while [ true ]; do (php /var/www/html/artisan schedule:run --verbose --no-interaction &); sleep 60; done"
     mysql:
         image: 'mysql:8.0'
         ports:
