@@ -6,7 +6,9 @@ use App\Http\Requests\CompanyStoreUpdateRequest as StoreUpdateRequest;
 use App\Http\Resources\CompanyResource as Resource;
 use App\Jobs\TesteJob;
 use App\Models\Company as Repository;
+use App\Services\CompanyService;
 use App\Services\EvaluationService;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -14,10 +16,13 @@ class CompanyController extends Controller
 
     protected $evaluationService;
 
-    public function __construct(Repository $repository, EvaluationService $evaluationService)
+    protected $companyService;
+
+    public function __construct(Repository $repository, EvaluationService $evaluationService, CompanyService $companyService)
     {
         $this->repository = $repository;
         $this->evaluationService = $evaluationService;
+        $this->companyService = $companyService;
     }
 
 
@@ -26,9 +31,9 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Resource::collection($this->repository->paginate());
+        return Resource::collection($this->companyService->getCompanies($request->filter ?: null));
     }
 
     /**
@@ -39,11 +44,11 @@ class CompanyController extends Controller
      */
     public function store(StoreUpdateRequest $request)
     {
-        $obj = $this->repository->create($request->validated());
+        $company = $this->companyService->createNewCompany($request->validated(), $request->image);
 
         TesteJob::dispatch();
         
-        return new Resource($obj);
+        return new Resource($company);
     }
 
     /**
@@ -67,13 +72,12 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string $url
+     * @param  string $uuid
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreUpdateRequest $request, $url)
+    public function update(StoreUpdateRequest $request, $uuid)
     {
-        $obj = $this->repository->where('url', $url)->firstOrFail();
-        $obj->update($request->validated());
+        $obj = $this->companyService->updateCompany($uuid, $request->validated(), $request->image);
         return new Resource($obj);
     }
 

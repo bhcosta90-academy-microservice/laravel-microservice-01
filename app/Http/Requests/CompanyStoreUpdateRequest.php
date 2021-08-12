@@ -25,16 +25,22 @@ class CompanyStoreUpdateRequest extends FormRequest
     {
         $url = $this->route('company');
 
-        return [
-            'name' => "required|min:3|max:150|unique:companies,name,{$url},url",
+        $ret = [
+            'name' => "required|min:3|max:150|unique:companies,name,{$url},uuid",
             'category_id' => 'required|exists:categories,id',
-            'whatsapp' => "required|unique:companies,whatsapp,{$url},url",
-            "email" => "required|email|unique:companies,email,{$url},url",
+            'whatsapp' => "required|unique:companies,whatsapp,{$url},uuid",
+            "email" => "required|email|unique:companies,email,{$url},uuid",
             "phone" => "nullable",
             "facebook" => "nullable",
             "instagram" => "nullable",
             "youtube" => "nullable",
-            "image" => "nullable",
+            'image' => ['required', 'image', 'max:1024'],
         ];
+
+        if ($this->method() == 'PUT') {
+            $ret['image'] = ['nullable', 'image', 'max:1024'];
+        }
+
+        return $ret;
     }
 }
