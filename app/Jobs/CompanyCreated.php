@@ -10,18 +10,21 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class TesteJob implements ShouldQueue
+class CompanyCreated implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $email;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($email)
     {
         //
+        $this->email = $email;
     }
 
     /**
@@ -31,6 +34,6 @@ class TesteJob implements ShouldQueue
      */
     public function handle()
     {
-        Log::info(time());
+        Log::info($this->email);
     }
 }

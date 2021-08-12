@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyStoreUpdateRequest as StoreUpdateRequest;
 use App\Http\Resources\CompanyResource as Resource;
+use App\Jobs\CompanyCreated;
 use App\Jobs\TesteJob;
 use App\Models\Company as Repository;
 use App\Services\CompanyService;
@@ -46,7 +47,7 @@ class CompanyController extends Controller
     {
         $company = $this->companyService->createNewCompany($request->validated(), $request->image);
 
-        TesteJob::dispatch();
+        CompanyCreated::dispatch($company->email)->onQueue('queue_email');
         
         return new Resource($company);
     }
