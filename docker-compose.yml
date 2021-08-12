@@ -22,6 +22,7 @@ services:
         depends_on:
             - mysql
             - redis
+        restart: unless-stop
     micro_01_worker:
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
@@ -42,6 +43,7 @@ services:
             - mysql
             - redis
         command: /bin/sh -c "while [ true ]; do (php /var/www/html/artisan queue:work --stop-when-empty &); sleep 1; done"
+        restart: unless-stop
     micro_01_cron:
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
@@ -62,6 +64,7 @@ services:
             - mysql
             - redis
         command: /bin/sh -c "while [ true ]; do (php /var/www/html/artisan schedule:run --verbose --no-interaction &); sleep 60; done"
+        restart: unless-stop
     mysql:
         image: 'mysql:8.0'
         ports:
@@ -80,7 +83,8 @@ services:
           test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
           retries: 3
           timeout: 5s
-        command: ["--default-authentication-plugin=mysql_native_password"]
+        command: "--default-authentication-plugin=mysql_native_password"
+        restart: unless-stop
 
     redis:
         image: 'redis:alpine'
@@ -94,6 +98,7 @@ services:
           test: ["CMD", "redis-cli", "ping"]
           retries: 3
           timeout: 5s
+        restart: unless-stop
 networks:
     sail:
         driver: bridge
