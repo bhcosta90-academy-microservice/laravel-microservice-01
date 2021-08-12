@@ -16,7 +16,7 @@ class CreateCompaniesTable extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories');
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->string('name')->unique();
             $table->string('url')->unique();
             $table->string('whatsapp')->unique();
