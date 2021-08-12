@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    micro_01:
+    app:
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
             dockerfile: Dockerfile
@@ -23,7 +23,7 @@ services:
             - mysql
             - redis
         restart: unless-stop
-    micro_01_worker:
+    worker:
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
             dockerfile: Dockerfile
@@ -44,7 +44,7 @@ services:
             - redis
         command: /bin/sh -c "while [ true ]; do (php /var/www/html/artisan queue:work --stop-when-empty &); sleep 1; done"
         restart: unless-stop
-    micro_01_cron:
+    cron:
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
             dockerfile: Dockerfile
