@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CompanyStoreUpdateRequest as StoreUpdateRequest;
 use App\Http\Resources\CompanyResource as Resource;
 use App\Models\Company as Repository;
+use App\Services\EvaluationService;
 
 class CompanyController extends Controller
 {
     protected $repository;
 
-    public function __construct(Repository $repository)
+    protected $evaluationService;
+
+    public function __construct(Repository $repository, EvaluationService $evaluationService)
     {
         $this->repository = $repository;
+        $this->evaluationService = $evaluationService;
     }
 
 
@@ -41,13 +45,18 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  string $url
+     * @param  string $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($url)
+    public function show($uuid)
     {
-        $obj = $this->repository->where('url', $url)->firstOrFail();
-        return new Resource($obj);
+        $body = json_decode($this->evaluationService->getEvaluation($uuid));
+        $obj = $this->repository->where('uuid', $uuid)->firstOrFail();
+        return (new Resource($obj))->additional([
+            'data' => [
+                'evaluations' => $body->data
+            ]
+        ]);
     }
 
     /**

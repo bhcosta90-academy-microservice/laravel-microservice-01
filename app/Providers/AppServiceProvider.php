@@ -18,9 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $router = $this->app['router'];
-        $router->pushMiddlewareToGroup('api', JsonResponseMiddleware::class);
-        app('router')->aliasMiddleware('json', JsonResponseMiddleware::class);
+        //
     }
 
     /**

@@ -68,19 +68,27 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bhcosta90-academy-microservice/package.git",
-                "reference": "457ce9fc22ca2f23416d52ddd0e77f66f632434b"
+                "reference": "c03bd077217cf4385111b76a54f101edfc488184"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bhcosta90-academy-microservice/package/zipball/457ce9fc22ca2f23416d52ddd0e77f66f632434b",
-                "reference": "457ce9fc22ca2f23416d52ddd0e77f66f632434b",
+                "url": "https://api.github.com/repos/bhcosta90-academy-microservice/package/zipball/c03bd077217cf4385111b76a54f101edfc488184",
+                "reference": "c03bd077217cf4385111b76a54f101edfc488184",
                 "shasum": ""
             },
             "require": {
+                "illuminate/http": "^8.54",
                 "illuminate/support": "^8.54"
             },
             "default-branch": true,
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Costa\\MicroService\\Providers\\MicroServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Costa\\MicroService\\": "./src"
@@ -96,7 +104,7 @@
                 "source": "https://github.com/bhcosta90-academy-microservice/package/tree/master",
                 "issues": "https://github.com/bhcosta90-academy-microservice/package/issues"
             },
-            "time": "2021-08-12T01:10:12+00:00"
+            "time": "2021-08-12T01:52:27+00:00"
         },
         {
             "name": "brick/math",
